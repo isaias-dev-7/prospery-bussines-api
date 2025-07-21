@@ -14,8 +14,9 @@ API REST creada con Spring Boot, PostgreSQL y autenticación JWT.
 
 ```bash
 mvn clean package
-
-## Run project in developer mode
-```bash 
+```
+## Run developer mode
+```bash
 mvn spring-boot: run
+```
 
