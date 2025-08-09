@@ -23,16 +23,26 @@ public class User {
     @Getter @Setter
     private String email;
 
+    @Column(nullable = false, unique = true)
+    @Getter @Setter
     private String phone;
 
     @Column(nullable = false)
     @Getter @Setter
     private String password;
 
+    @Column(nullable = false)
+    @Getter @Setter
     private boolean active = true;
 
+    @Column(nullable = false)
+    @Getter @Setter
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
+    @Column(nullable = true, length = 6)
+    @Getter @Setter
+    private String verificationCode;
 }
