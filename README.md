@@ -46,9 +46,9 @@ Make sure you have the following installed:
 docker-compose up --build
 ```
 This will spin up:
-    - Spring Boot backend on http://localhost:8080
-    - PostgreSQL database on port 5432
-    - pgAdmin on http://localhost:5050
+- Spring Boot backend on http://localhost:8080
+- PostgreSQL database on port 5432
+- pgAdmin on http://localhost:5050
 
 - Stop the services:
 ``` bash
