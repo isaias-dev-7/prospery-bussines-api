@@ -41,7 +41,7 @@ Make sure you have the following installed:
 
 1. **Clone the repository**
 
-- Run:
+* Run:
 ``` bash
 docker-compose up --build
 ```
@@ -50,7 +50,7 @@ This will spin up:
 - PostgreSQL database on port 5432
 - pgAdmin on http://localhost:5050
 
-- Stop the services:
+* Stop the services:
 ``` bash
 docker-compose down
 ```
