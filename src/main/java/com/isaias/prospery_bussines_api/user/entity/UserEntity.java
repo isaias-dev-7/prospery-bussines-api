@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue
     @Getter @Setter
@@ -39,8 +39,9 @@ public class User {
     @Getter @Setter
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Getter @Setter
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
     @Column(nullable = true, length = 6)
     @Getter @Setter

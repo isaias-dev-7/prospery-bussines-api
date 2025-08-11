@@ -43,6 +43,6 @@ public class UtilsService {
     public ErrorResponse handleError(Throwable error) {
         if (error instanceof ErrorResponse)
             return (ErrorResponse) error;
-        return new ErrorResponse(400, "");
+        return new ErrorResponse(400, error.getMessage());
     }
 }
