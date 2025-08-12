@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class PaginResponse implements Response<Map<String, Object>> {
     private int statusCode;
-    private int total;
+    private long total;
     private int page;
     private int limit;
     private int totalPage;
@@ -14,7 +14,7 @@ public class PaginResponse implements Response<Map<String, Object>> {
     public PaginResponse(
             int statusCode,
             Object data,
-            int total,
+            long total,
             int page,
             int limit,
             int totalPage) {
@@ -44,7 +44,7 @@ public class PaginResponse implements Response<Map<String, Object>> {
     public static PaginResponse build(
             int statusCode,
             Object data,
-            int total,
+            long total,
             int page,
             int limit,
             int totalPage) {

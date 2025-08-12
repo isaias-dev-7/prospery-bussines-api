@@ -6,25 +6,27 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 public class CreateUserDto {
     @NotBlank
     @Size(min = 3, max = 20)
-    public String username;
+    private String username;
 
     @NotBlank
     @Email
-    public  String email;
+    private String email;
 
     @NotBlank
     @Pattern(regexp = "^\\+?[0-9]{8,15}$", message = UserMessages.INVALID_PHONE)
-    public  String phone;
+    private String phone;
 
     @NotBlank
     @Size(min = 8, message = UserMessages.INVALID_PASSWORD)
-    public  String password;
+    private String password;
 
     @NotBlank
     @Pattern(regexp = "^(USER|ADMIN|SELLER)$", message = UserMessages.INVALID_ROLE)
-    public  String role;
+    private String role;
 }

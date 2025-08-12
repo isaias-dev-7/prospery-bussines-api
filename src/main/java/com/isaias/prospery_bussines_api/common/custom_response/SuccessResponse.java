@@ -1,6 +1,8 @@
 package com.isaias.prospery_bussines_api.common.custom_response;
 
-public class SuccessResponse implements Response<Object>{
+import java.util.Map;
+
+public class SuccessResponse implements Response<Map<String, Object>>{
     private int statusCode;
     private Object data;
 
@@ -10,8 +12,8 @@ public class SuccessResponse implements Response<Object>{
     }
 
     @Override
-    public Object toJson() {
-        return this.data;
+    public Map<String, Object> toJson() {
+        return Map.of("data", this.data);
     }
 
     @Override

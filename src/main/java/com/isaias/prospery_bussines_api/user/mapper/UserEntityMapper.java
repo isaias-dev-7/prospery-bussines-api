@@ -12,10 +12,10 @@ public class UserEntityMapper {
     public UserEntity toEntity(CreateUserDto createUserDto, String hashedPassword){
         UserEntity user = new UserEntity();
         user.setPassword(hashedPassword);
-        user.setEmail(createUserDto.email);
-        user.setPhone(createUserDto.phone);
-        user.setUsername(createUserDto.username);
-        user.setRole(Role.valueOf(createUserDto.role));
+        user.setEmail(createUserDto.getEmail());
+        user.setPhone(createUserDto.getPhone());
+        user.setUsername(createUserDto.getUsername());
+        user.setRole(Role.valueOf(createUserDto.getRole()));
         return user;
     }
 }
