@@ -1,5 +1,6 @@
 package com.isaias.prospery_bussines_api.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isaias.prospery_bussines_api.common.enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class UserEntity {
 
     @Column(nullable = false)
     @Getter @Setter
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
@@ -45,5 +47,6 @@ public class UserEntity {
 
     @Column(nullable = true, length = 6)
     @Getter @Setter
+    @JsonIgnore
     private String verificationCode;
 }

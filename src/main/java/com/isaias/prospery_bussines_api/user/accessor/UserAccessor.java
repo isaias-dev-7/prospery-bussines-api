@@ -1,14 +1,23 @@
 package com.isaias.prospery_bussines_api.user.accessor;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
+import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
+import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 import com.isaias.prospery_bussines_api.user.mapper.UserEntityMapper;
 import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 import com.isaias.prospery_bussines_api.user.repository.UserRepository;
+import com.isaias.prospery_bussines_api.user.specification.UserSpecification;
 
 @Component
 public class UserAccessor {
@@ -22,21 +31,49 @@ public class UserAccessor {
 
     public void createUser(CreateUserDto createUserDto) {
         try {
-            if(this.existsUsername(createUserDto.username)) 
-                throw ErrorResponse.build(400,UserMessages.USERNAME_ALREADY_EXIST);
-            if(this.existsEmail(createUserDto.email))
-                throw ErrorResponse.build(400,UserMessages.EMAIL_ALREADY_EXIST);
-            if(this.existsPhoneNumber(createUserDto.phone))
-                throw ErrorResponse.build(400,UserMessages.PHONE_NUMBER_ALREADY_EXIST);
+            if (this.existsUsername(createUserDto.getUsername()))
+                throw ErrorResponse.build(400, UserMessages.USERNAME_ALREADY_EXIST);
+            if (this.existsEmail(createUserDto.getEmail()))
+                throw ErrorResponse.build(400, UserMessages.EMAIL_ALREADY_EXIST);
+            if (this.existsPhoneNumber(createUserDto.getPhone()))
+                throw ErrorResponse.build(400, UserMessages.PHONE_NUMBER_ALREADY_EXIST);
 
-            String hashedPassword = utilsService.hashPassword(createUserDto.password);
+            String hashedPassword = utilsService.hashPassword(createUserDto.getPassword());
             userRepository.save(userEntityMapper.toEntity(createUserDto, hashedPassword));
         } catch (Exception e) {
             throw handleException(e, "createUser");
         }
     }
 
-    public boolean existsUsername(String username){
+    public UserEntity getUserById(String id) {
+        try {
+            return userRepository.findById(UUID.fromString(id))
+                    .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
+        } catch (Exception e) {
+            throw handleException(e, "getUserById");
+        }
+    }
+
+    public Page<UserEntity> getAllUsers(PaginDto paginDto) {
+        try {
+            Pageable pageable = PageRequest.of(paginDto.getPage(), paginDto.getLimit());
+            Specification<UserEntity> spec = UserSpecification.filters(paginDto);
+            return userRepository.findAll(spec, pageable);
+        } catch (Exception e) {
+            throw handleException(e, "getAllUsers");
+        }
+    }
+
+    public void deleteUserById(String id){
+        try {
+            UserEntity user = this.getUserById(id);
+            userRepository.delete(user);
+        } catch (Exception e) {
+            throw handleException(e, "deleteUserById");
+        }
+    }
+
+    public boolean existsUsername(String username) {
         try {
             return userRepository.existsByUsername(username);
         } catch (Exception e) {
@@ -44,7 +81,7 @@ public class UserAccessor {
         }
     }
 
-    public boolean existsEmail(String email){
+    public boolean existsEmail(String email) {
         try {
             return userRepository.existsByEmail(email);
         } catch (Exception e) {
@@ -52,15 +89,15 @@ public class UserAccessor {
         }
     }
 
-    public boolean existsPhoneNumber(String phoneNumber){
+    public boolean existsPhoneNumber(String phoneNumber) {
         try {
             return userRepository.existsByPhone(phoneNumber);
         } catch (Exception e) {
-             throw handleException(e, "existsPhoneNumber");
+            throw handleException(e, "existsPhoneNumber");
         }
     }
 
-    private ErrorResponse handleException(Throwable error, String function){
+    private ErrorResponse handleException(Throwable error, String function) {
         System.out.println("[ERROR] -  /user/accessor/UserAccessor: " + function);
         throw utilsService.handleError(error);
     }
