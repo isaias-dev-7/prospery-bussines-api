@@ -2,6 +2,7 @@ package com.isaias.prospery_bussines_api.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
+import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
 
 import jakarta.validation.Valid;
 
@@ -35,10 +37,27 @@ public class UserController {
         );
     }
 
+    @PostMapping("/{uuid}")
+    public ResponseEntity<?> updatePassword(
+        @PathVariable String uuid,
+        @Valid @RequestBody UpdateUserPassDto updateUserPassDto
+        ){
+        return utilsService.handleResponse(
+            () -> userService.updateUserPassById(uuid, updateUserPassDto)
+        );
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody CreateUserDto createUserDto){
         return utilsService.handleResponse(
             () -> userService.createUser(createUserDto)
+        );
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<?> delete(@PathVariable String uuid){
+        return utilsService.handleResponse(
+            () -> userService.deleteUser(uuid)
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.isaias.prospery_bussines_api.common;
 
+import java.security.SecureRandom;
 import java.util.function.Supplier;
 
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,19 @@ public class UtilsService {
 
     public boolean verifyPassword(String password, String hashedPassword) {
         return passwordEncoder.matches(password, hashedPassword);
+    }
+
+    public String generateCode(){
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(6);
+
+        for (int i = 0; i < 6; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+
+        return sb.toString();
     }
 
     public ResponseEntity<?> handleResponse(Supplier<Response<?>> supplier) {
