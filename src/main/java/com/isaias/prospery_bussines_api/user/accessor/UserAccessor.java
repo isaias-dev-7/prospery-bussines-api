@@ -46,7 +46,7 @@ public class UserAccessor {
 
             UserEntity user = userEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
-
+            
             userRepository.save(user);
         } catch (Exception e) {
             throw handleException(e, "createUser");

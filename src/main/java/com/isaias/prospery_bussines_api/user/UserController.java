@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isaias.prospery_bussines_api.auth.decorators.Auth;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
+import com.isaias.prospery_bussines_api.common.enums.Role;
+import com.isaias.prospery_bussines_api.common.roles.RoleConstant;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
 
@@ -31,6 +34,7 @@ public class UserController {
     }
 
     @GetMapping
+    @Auth({RoleConstant.ADMIN})
     public ResponseEntity<?> findAll(@Valid PaginDto paginDto){
         return utilsService.handleResponse(
             () -> userService.findAllUser(paginDto)
