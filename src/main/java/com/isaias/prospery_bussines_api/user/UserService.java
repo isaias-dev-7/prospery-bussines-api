@@ -14,6 +14,7 @@ import com.isaias.prospery_bussines_api.common.custom_response.SuccessResponse;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.user.accessor.UserAccessor;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
+import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 
@@ -53,6 +54,26 @@ public class UserService {
                 );
         } catch (Exception e) {
             return handleException(e, "findAllUser");
+        }
+    }
+
+    public Response<?> updateUserPassById(String uuid, UpdateUserPassDto updateUserDto){
+        try {
+            return userAccessor.updateUserPassById(uuid, updateUserDto) ?
+                   SuccessResponse.build(200, Map.of("message", UserMessages.USER_PASS_UPDATED))
+                   :
+                   ErrorResponse.build(400, UserMessages.USER_PASS_NOT_UPDATED);
+        } catch (Exception e) {
+            return handleException(e, "updateUserPassById");
+        }
+    }
+
+    public Response<?> deleteUser(String uuid){
+        try {
+            userAccessor.deleteUserById(uuid);
+            return SuccessResponse.build(204, "");
+        } catch (Exception e) {
+           return handleException(e, "deleteUser");
         }
     }
 
