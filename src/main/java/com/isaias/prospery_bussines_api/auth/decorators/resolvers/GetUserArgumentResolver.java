@@ -1,4 +1,4 @@
-package com.isaias.prospery_bussines_api.auth.decorators.injectors;
+package com.isaias.prospery_bussines_api.auth.decorators.resolvers;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class GetUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(GetUser.class)
-                && parameter.getParameterType().equals(UserEntity.class); // O UserEntity si usas ese tipo
+                && parameter.getParameterType().equals(UserEntity.class);
     }
 
     @Override
