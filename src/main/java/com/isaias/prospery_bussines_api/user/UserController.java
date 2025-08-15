@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isaias.prospery_bussines_api.auth.decorators.Auth;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
-import com.isaias.prospery_bussines_api.common.enums.Role;
 import com.isaias.prospery_bussines_api.common.roles.RoleConstant;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
@@ -27,6 +26,7 @@ public class UserController {
     @Autowired private UserService userService;
 
     @GetMapping("/{uuid}")
+    @Auth({RoleConstant.ADMIN})
     public ResponseEntity<?> findUser(@PathVariable String uuid){
         return utilsService.handleResponse(
             () -> userService.findUserByUUID(uuid)
@@ -42,6 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/{uuid}")
+    @Auth({RoleConstant.ADMIN, RoleConstant.SELLER, RoleConstant.USER})
     public ResponseEntity<?> updatePassword(
         @PathVariable String uuid,
         @Valid @RequestBody UpdateUserPassDto updateUserPassDto
@@ -52,6 +53,7 @@ public class UserController {
     }
 
     @PostMapping
+    @Auth({RoleConstant.SELLER, RoleConstant.USER})
     public ResponseEntity<?> create(@Valid @RequestBody CreateUserDto createUserDto){
         return utilsService.handleResponse(
             () -> userService.createUser(createUserDto)
@@ -59,6 +61,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{uuid}")
+    @Auth({RoleConstant.ADMIN})
     public ResponseEntity<?> delete(@PathVariable String uuid){
         return utilsService.handleResponse(
             () -> userService.deleteUser(uuid)
