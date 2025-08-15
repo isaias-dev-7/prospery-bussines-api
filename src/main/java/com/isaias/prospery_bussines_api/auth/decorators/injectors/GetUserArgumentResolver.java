@@ -31,7 +31,6 @@ public class GetUserArgumentResolver implements HandlerMethodArgumentResolver {
             throws Exception {
 
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        System.out.println("PEPE"+request.getAttribute("User"));
         UserEntity user = (UserEntity) request.getAttribute("User");
 
         if (user == null) {
