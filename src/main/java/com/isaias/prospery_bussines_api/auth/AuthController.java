@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isaias.prospery_bussines_api.auth.dtos.LoginDto;
 import com.isaias.prospery_bussines_api.common.UtilsService;
+import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 
 import jakarta.validation.Valid;
 
@@ -22,6 +23,13 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto){
         return utilsService.handleResponse(
             () -> authService.login(loginDto)
+        );
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody CreateUserDto createUserDto){
+        return utilsService.handleResponse(
+            () -> authService.register(createUserDto)
         );
     }
 }
