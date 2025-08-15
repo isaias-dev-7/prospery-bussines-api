@@ -35,7 +35,7 @@ public class UserEntity {
 
     @Column(nullable = false)
     @Getter @Setter
-    private boolean active = true;
+    private boolean active = false;
 
     @Column(nullable = false)
     @Getter @Setter

@@ -15,7 +15,6 @@ import com.isaias.prospery_bussines_api.common.messages_response.CommonMesajes;
 import com.isaias.prospery_bussines_api.user.accessor.UserAccessor;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
-import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 
 @Service
 public class AuthService {
@@ -28,8 +27,8 @@ public class AuthService {
             UserEntity user = userAccessor.getUserByUsername(loginDto.getUsername());
             boolean correctPass = utilsService.verifyPassword(loginDto.getPassword(), user.getPassword());
 
-            if (!correctPass) throw ErrorResponse.build(401, CommonMesajes.INVALID_CREDENTIALS);
-
+            if(!correctPass) throw ErrorResponse.build(401, CommonMesajes.INVALID_CREDENTIALS);
+            if(!user.isActive()) throw ErrorResponse.build(401, "User not active");
             String token = jwtService.generateToken(user);
 
             return SuccessResponse.build(
@@ -47,18 +46,16 @@ public class AuthService {
     public Response<?> register(CreateUserDto createUserDto){
         try {
             UserEntity user = userAccessor.createUser(createUserDto);
-            String token = jwtService.generateToken(user);
             return SuccessResponse.build(
                 200, 
-                Map.ofEntries(
-                            Map.entry("username", user.getUsername()),
-                            Map.entry("token", token)
-                            )   
+                Map.of("message", user.getUsername() + " " + CommonMesajes.ACTIVATION_CODE)
             );
         } catch (Exception e) {
             return handleException(e, "register");
         }
     }
+
+
 
     private ErrorResponse handleException(Throwable error, String function) {
         System.out.println("[ERROR] -  /auth/AuthService: " + function);

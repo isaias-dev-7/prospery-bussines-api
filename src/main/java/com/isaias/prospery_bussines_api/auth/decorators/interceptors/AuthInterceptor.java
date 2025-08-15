@@ -39,6 +39,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         
         String uuid = jwtService.extractUuid(token);
         UserEntity user = userAccessor.getUserById(uuid);
+        if(!user.isActive()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not active");
+
         request.setAttribute("User", user);
 
         boolean hasRole = Arrays.asList(auth.value()).contains(String.valueOf(user.getRole()));

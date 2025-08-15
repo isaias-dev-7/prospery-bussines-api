@@ -11,51 +11,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isaias.prospery_bussines_api.auth.decorators.Auth;
+import com.isaias.prospery_bussines_api.auth.decorators.GetUser;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.common.roles.RoleConstant;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
+import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired private UtilsService utilsService;
-    @Autowired private UserService userService;
+    @Autowired
+    private UtilsService utilsService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/{uuid}")
-    @Auth({RoleConstant.ADMIN})
-    public ResponseEntity<?> findUser(@PathVariable String uuid){
+    @Auth({ RoleConstant.ADMIN })
+    public ResponseEntity<?> findUser(@PathVariable String uuid) {
         return utilsService.handleResponse(
-            () -> userService.findUserByUUID(uuid)
-        );
+                () -> userService.findUserByUUID(uuid)
+            );
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getVerificationCode(@PathVariable String email) {
+        return utilsService.handleResponse(
+                () -> userService.getVerificationCode(email)
+            );
     }
 
     @GetMapping
-    @Auth({RoleConstant.ADMIN})
-    public ResponseEntity<?> findAll(@Valid PaginDto paginDto){
+    @Auth({ RoleConstant.ADMIN })
+    public ResponseEntity<?> findAll(@Valid PaginDto paginDto) {
         return utilsService.handleResponse(
-            () -> userService.findAllUser(paginDto)
-        );
+                () -> userService.findAllUser(paginDto)
+            );
     }
 
     @PostMapping("/{uuid}")
-    @Auth({RoleConstant.ADMIN, RoleConstant.SELLER, RoleConstant.USER})
+    @Auth({ RoleConstant.ADMIN, RoleConstant.SELLER, RoleConstant.USER })
     public ResponseEntity<?> updatePassword(
-        @PathVariable String uuid,
-        @Valid @RequestBody UpdateUserPassDto updateUserPassDto
-        ){
+            @PathVariable String uuid,
+            @Valid @RequestBody UpdateUserPassDto updateUserPassDto) {
         return utilsService.handleResponse(
-            () -> userService.updateUserPassById(uuid, updateUserPassDto)
-        );
+                () -> userService.updateUserPassById(uuid, updateUserPassDto)
+            );
     }
 
     @DeleteMapping("/{uuid}")
-    @Auth({RoleConstant.ADMIN})
-    public ResponseEntity<?> delete(@PathVariable String uuid){
+    @Auth({ RoleConstant.ADMIN })
+    public ResponseEntity<?> delete(@PathVariable String uuid) {
         return utilsService.handleResponse(
-            () -> userService.deleteUser(uuid)
-        );
+                () -> userService.deleteUser(uuid)
+            );
     }
 }

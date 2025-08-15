@@ -2,6 +2,7 @@ package com.isaias.prospery_bussines_api.user.accessor;
 
 import java.util.UUID;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
+import com.isaias.prospery_bussines_api.mail.MailService;
+import com.isaias.prospery_bussines_api.scheduled_tasks.ScheduledTaskService;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
@@ -27,6 +30,11 @@ public class UserAccessor {
     private UtilsService utilsService;
     @Autowired
     private UserEntityMapper userEntityMapper;
+    @Autowired 
+    private MailService mailService;
+    @Autowired 
+    @Lazy
+    private ScheduledTaskService scheduledTaskService;
 
     public UserAccessor(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -46,7 +54,9 @@ public class UserAccessor {
 
             UserEntity user = userEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
-            
+            mailService.sendMail(user);
+
+            scheduledTaskService.deleteUserAfterFiveMinutesInactive(user.getUsername());
             return userRepository.save(user);
         } catch (Exception e) {
             throw handleException(e, "createUser");
@@ -106,6 +116,24 @@ public class UserAccessor {
                     .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
         } catch (Exception e) {
             throw handleException(e, "getUserByUsername");
+        }
+    }
+
+    public void saveUser(UserEntity user){
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw handleException(e, "saveUser");
+        }
+    }
+
+    public void sendVerificationCodeToUser(String email){
+        try {
+            UserEntity user = userRepository.findByEmail(email)
+                                .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
+            mailService.sendMail(user);
+        } catch (Exception e) {
+            throw handleException(e, "sendCodeVeryfication");
         }
     }
 
