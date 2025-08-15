@@ -11,8 +11,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.isaias.prospery_bussines_api.auth.decorators.injectors.GetUserArgumentResolver;
 import com.isaias.prospery_bussines_api.auth.decorators.interceptors.AuthInterceptor;
+import com.isaias.prospery_bussines_api.auth.decorators.resolvers.GetUserArgumentResolver;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
