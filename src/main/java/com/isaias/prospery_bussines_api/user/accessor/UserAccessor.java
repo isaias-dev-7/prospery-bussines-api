@@ -32,7 +32,7 @@ public class UserAccessor {
         this.userRepository = userRepository;
     }
 
-    public void createUser(CreateUserDto createUserDto) {
+    public UserEntity createUser(CreateUserDto createUserDto) {
         try {
             if (this.existsUsername(createUserDto.getUsername()))
                 throw ErrorResponse.build(400, UserMessages.USERNAME_ALREADY_EXIST);
@@ -47,7 +47,7 @@ public class UserAccessor {
             UserEntity user = userEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
             
-            userRepository.save(user);
+            return userRepository.save(user);
         } catch (Exception e) {
             throw handleException(e, "createUser");
         }

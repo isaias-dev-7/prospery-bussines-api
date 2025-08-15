@@ -14,7 +14,6 @@ import com.isaias.prospery_bussines_api.auth.decorators.Auth;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.common.roles.RoleConstant;
-import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
 
 import jakarta.validation.Valid;
@@ -49,14 +48,6 @@ public class UserController {
         ){
         return utilsService.handleResponse(
             () -> userService.updateUserPassById(uuid, updateUserPassDto)
-        );
-    }
-
-    @PostMapping
-    @Auth({RoleConstant.SELLER, RoleConstant.USER})
-    public ResponseEntity<?> create(@Valid @RequestBody CreateUserDto createUserDto){
-        return utilsService.handleResponse(
-            () -> userService.createUser(createUserDto)
         );
     }
 

@@ -13,7 +13,6 @@ import com.isaias.prospery_bussines_api.common.custom_response.Response;
 import com.isaias.prospery_bussines_api.common.custom_response.SuccessResponse;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.user.accessor.UserAccessor;
-import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
@@ -22,15 +21,6 @@ import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 public class UserService {
     @Autowired private UtilsService utilsService;
     @Autowired private UserAccessor userAccessor;
-
-    public Response<?> createUser(CreateUserDto createUserDto){
-        try {
-            userAccessor.createUser(createUserDto);
-            return SuccessResponse.build(200, Map.of("message", UserMessages.USER_CREATED));
-        } catch (Exception e) {
-            return handleException(e, "createUser");
-        }
-    }
 
     public Response<?> findUserByUUID(String uuid){
         try {

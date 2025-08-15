@@ -23,15 +23,8 @@ public class JwtService {
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
-    @Value("${application.security.jwt.refresh-token.expiration}")
-    private long refreshExpiration;
-
     public String generateToken(UserEntity user) {
         return buildToken(user, jwtExpiration);
-    }
-
-    public String generateRefreshToken(UserEntity user) {
-        return buildToken(user, refreshExpiration);
     }
 
     public boolean isValid(String token) {
