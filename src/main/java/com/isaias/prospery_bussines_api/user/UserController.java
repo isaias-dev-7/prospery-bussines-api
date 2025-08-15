@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isaias.prospery_bussines_api.auth.decorators.Auth;
-import com.isaias.prospery_bussines_api.auth.decorators.GetUser;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.common.roles.RoleConstant;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
-import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 import jakarta.validation.Valid;
 
@@ -36,7 +34,7 @@ public class UserController {
             );
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<?> getVerificationCode(@PathVariable String email) {
         return utilsService.handleResponse(
                 () -> userService.getVerificationCode(email)

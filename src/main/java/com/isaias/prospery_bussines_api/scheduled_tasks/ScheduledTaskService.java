@@ -29,7 +29,7 @@ public class ScheduledTaskService {
                     userAccessor.saveUser(user);
                 }
 
-            }, Duration.ofMinutes(1));
+            }, Duration.ofMinutes(5));
         } catch (Exception e) {
             handleException(e, "deleteUserAfterFiveMinutesInactive");
         }
