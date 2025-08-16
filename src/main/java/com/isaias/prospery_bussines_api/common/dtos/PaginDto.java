@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class PaginDto {
     @Min(value = 0)
-    private int page;
+    private int page = 0;
 
     @Min(value = 1)
     private int limit = 10;

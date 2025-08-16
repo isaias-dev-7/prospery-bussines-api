@@ -27,6 +27,12 @@ public class UtilsService {
     }
 
     public boolean verifyPassword(String password, String hashedPassword) {
+        if (password == null || password.trim().isEmpty())
+            throw new IllegalArgumentException(CommonMesajes.INVALID_PARAM);
+            
+        if (hashedPassword == null || hashedPassword.trim().isEmpty())
+            throw new IllegalArgumentException(CommonMesajes.INVALID_PARAM);
+
         return passwordEncoder.matches(password, hashedPassword);
     }
 

@@ -23,7 +23,10 @@ public class CreateUserDto {
     private String phone;
 
     @NotBlank
-    @Size(min = 8, message = UserMessages.INVALID_PASSWORD)
+    @Pattern(
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,}$",
+        message = UserMessages.INVALID_PASSWORD
+    )
     private String password;
 
     @NotBlank

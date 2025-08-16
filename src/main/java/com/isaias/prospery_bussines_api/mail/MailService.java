@@ -27,9 +27,10 @@ public class MailService {
             message.setTo(mailDto.getTo());
             message.setSubject(mailDto.getSubject());
             message.setFrom(from);
+
             javaMailSender.send(message);
         } catch (Exception e) {
-            handleException(e, "sendMai");
+            handleException(e, "sendMail");
         }
     }
 

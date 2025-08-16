@@ -30,7 +30,7 @@ public class UserService {
             UserEntity user = userAccessor.getUserById(uuid);
             return SuccessResponse.build(200, Map.of("user", user));
         } catch (Exception e) {
-            return handleException(e, "indUserByUUID");
+            return handleException(e, "findUserByUUID");
         }
     }
 
