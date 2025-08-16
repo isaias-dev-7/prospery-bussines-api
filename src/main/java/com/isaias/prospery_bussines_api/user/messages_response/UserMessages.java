@@ -2,7 +2,7 @@ package com.isaias.prospery_bussines_api.user.messages_response;
 
 public class UserMessages {
     public static final String INVALID_PHONE = "Invalid phone number";
-    public static final String INVALID_PASSWORD = "Password must contain at least 8 characters.";
+    public static final String INVALID_PASSWORD = "Password must contain uppercase, lowercase, special character and be at least 8 characters long";
     public static final String INVALID_ROLE = "Roles (USER | SELLER | ADMIN)";
     public static final String USER_CREATED = "User created successfully";
     public static final String USERNAME_ALREADY_EXIST = "Username already exits";

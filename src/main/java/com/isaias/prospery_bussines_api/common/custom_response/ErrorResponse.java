@@ -13,7 +13,7 @@ public class ErrorResponse extends RuntimeException implements Response<Map<Stri
 
     @Override
     public Map<String, Object> toJson() {
-        return Map.of("message", this.message);
+        return Map.of("data", Map.of("message", this.message));
     }
 
     @Override

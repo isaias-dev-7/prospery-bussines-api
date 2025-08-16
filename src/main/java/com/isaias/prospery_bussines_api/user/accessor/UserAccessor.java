@@ -26,12 +26,16 @@ import com.isaias.prospery_bussines_api.user.specification.UserSpecification;
 @Component
 public class UserAccessor {
     private final UserRepository userRepository;
+
     @Autowired
     private UtilsService utilsService;
+
     @Autowired
     private UserEntityMapper userEntityMapper;
+
     @Autowired 
     private MailService mailService;
+    
     @Autowired 
     @Lazy
     private ScheduledTaskService scheduledTaskService;
