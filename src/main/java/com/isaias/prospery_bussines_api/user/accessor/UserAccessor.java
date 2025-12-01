@@ -4,12 +4,14 @@ import java.util.UUID;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import com.isaias.prospery_bussines_api.auth.dtos.ConfirmationCodeDto;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
@@ -162,6 +164,22 @@ public class UserAccessor {
             return userRepository.existsByPhone(phoneNumber);
         } catch (Exception e) {
             throw handleException(e, "existsPhoneNumber");
+        }
+    }
+
+    public boolean confirmAccount(ConfirmationCodeDto confirmationCodeDto) {
+        try {
+            UserEntity user = this.getUserByUsername(confirmationCodeDto.getUsername());
+            boolean confirm = user.getVerificationCode().equals(confirmationCodeDto.getCode());
+           
+            if(confirm){
+                user.setActive(true);
+                this.saveUser(user);
+            }
+
+            return confirm;
+        } catch (Exception e) {
+            throw handleException(e, "confirmAccount");
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.isaias.prospery_bussines_api.auth.dtos.ConfirmationCodeDto;
 import com.isaias.prospery_bussines_api.auth.dtos.LoginDto;
 import com.isaias.prospery_bussines_api.auth.jwt.JwtService;
 import com.isaias.prospery_bussines_api.common.UtilsService;
@@ -15,6 +16,7 @@ import com.isaias.prospery_bussines_api.common.messages_response.CommonMesajes;
 import com.isaias.prospery_bussines_api.user.accessor.UserAccessor;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
+import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 
 @Service
 public class AuthService {
@@ -48,13 +50,29 @@ public class AuthService {
             UserEntity user = userAccessor.createUser(createUserDto);
             return SuccessResponse.build(
                 200, 
-                Map.of("message", user.getUsername() + " " + CommonMesajes.ACTIVATION_CODE)
+                Map.ofEntries(
+                            Map.entry("message", user.getUsername() + " " + CommonMesajes.ACTIVATION_CODE),
+                            Map.entry("username", user.getUsername())
+                            )
             );
         } catch (Exception e) {
             return handleException(e, "register");
         }
     }
 
+    public Response<?> confirmAccount(ConfirmationCodeDto confirmationCodeDto){
+        try {
+            boolean confirm = userAccessor.confirmAccount(confirmationCodeDto);
+            String message =  confirm ? UserMessages.USER_ACCOUNT_ACTIVATED : UserMessages.USER_ACCOUNT_FAIL_CONFIRMATION;
+             
+            return SuccessResponse.build(
+                confirm ? 200 : 401, 
+                Map.of("message", message)
+            );
+        } catch (Exception e) {
+            return handleException(e, "confirmAccount");
+        }
+    }
 
 
     private ErrorResponse handleException(Throwable error, String function) {
