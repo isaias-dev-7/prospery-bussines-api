@@ -12,4 +12,6 @@ public class UserMessages {
     public static final String USER_PASS_UPDATED = "User updated successfully";
     public static final String USER_PASS_NOT_UPDATED = "The password can't be update";
     public static final String USER_DELETED = "User deleted successfully";
+    public static final String USER_ACCOUNT_ACTIVATED = "User account activated successfully";
+    public static final String USER_ACCOUNT_FAIL_CONFIRMATION = "User confirmation account faild";
 }

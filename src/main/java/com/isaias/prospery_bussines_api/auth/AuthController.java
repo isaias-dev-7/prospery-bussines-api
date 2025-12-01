@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isaias.prospery_bussines_api.auth.dtos.ConfirmationCodeDto;
 import com.isaias.prospery_bussines_api.auth.dtos.LoginDto;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
@@ -31,5 +32,14 @@ public class AuthController {
         return utilsService.handleResponse(
             () -> authService.register(createUserDto)
         );
+    }
+
+    @PostMapping("/code")
+    public ResponseEntity<?> confirmationCode(
+            @Valid @RequestBody ConfirmationCodeDto confirmationCodeDto
+        ){
+            return utilsService.handleResponse(
+                () -> authService.confirmAccount(confirmationCodeDto)
+            );
     }
 }
