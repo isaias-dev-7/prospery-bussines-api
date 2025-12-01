@@ -7,14 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.isaias.prospery_bussines_api.auth.decorators.Auth;
-import com.isaias.prospery_bussines_api.auth.decorators.GetUser;
 import com.isaias.prospery_bussines_api.auth.dtos.ConfirmationCodeDto;
 import com.isaias.prospery_bussines_api.auth.dtos.LoginDto;
 import com.isaias.prospery_bussines_api.common.UtilsService;
-import com.isaias.prospery_bussines_api.common.roles.RoleConstant;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
-import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 import jakarta.validation.Valid;
 
