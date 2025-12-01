@@ -2,7 +2,6 @@ package com.isaias.prospery_bussines_api.auth;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isaias.prospery_bussines_api.auth.dtos.ConfirmationCodeDto;
@@ -20,9 +19,15 @@ import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 
 @Service
 public class AuthService {
-    @Autowired private UtilsService utilsService;
-    @Autowired private UserAccessor userAccessor;
-    @Autowired private JwtService jwtService;
+    private final UtilsService utilsService;
+    private final UserAccessor userAccessor;
+    private final JwtService jwtService;
+
+    public AuthService(UtilsService utilsService, UserAccessor userAccessor, JwtService jwtService) {
+        this.utilsService = utilsService;
+        this.userAccessor = userAccessor;
+        this.jwtService = jwtService;
+    }
 
     public Response<?> login(LoginDto loginDto) {
         try {
@@ -71,6 +76,17 @@ public class AuthService {
             );
         } catch (Exception e) {
             return handleException(e, "confirmAccount");
+        }
+    }
+
+    public Response<?> getSecureCode(UserEntity user){
+        try {
+            return SuccessResponse.build(
+                200, 
+                Map.of("code", user.getVerificationCode())
+            );
+        } catch (Exception e) {
+            return handleException(e, "getSecureCode");
         }
     }
 

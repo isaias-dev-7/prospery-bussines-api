@@ -3,32 +3,26 @@ package com.isaias.prospery_bussines_api.scheduled_tasks;
 import java.time.Duration;
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
-
-import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.user.accessor.UserAccessor;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 @Service
 public class ScheduledTaskService {
-     @Autowired private TaskScheduler scheduler;
-     @Autowired private UserAccessor userAccessor;
-     @Autowired private UtilsService utilsService;
+      private TaskScheduler scheduler;
+      private UserAccessor userAccessor;
+
+      public ScheduledTaskService(TaskScheduler scheduler, UserAccessor userAccessor){
+        this.scheduler = scheduler;
+        this.userAccessor = userAccessor;
+      }
 
     public void deleteUserAfterFiveMinutesInactive(String username){
         try {
             executeWithDelay(() -> {
                 UserEntity user = userAccessor.getUserByUsername(username);
-                if(!user.isActive()){
-                    userAccessor.deleteUserById(String.valueOf(user.getId()));
-                }else {
-                    String verifyCode = utilsService.generateCode();
-                    user.setVerificationCode(verifyCode);
-                    userAccessor.saveUser(user);
-                }
-
+                if(!user.isActive()) userAccessor.deleteUserById(String.valueOf(user.getId()));
             }, Duration.ofMinutes(5));
         } catch (Exception e) {
             handleException(e, "deleteUserAfterFiveMinutesInactive");
