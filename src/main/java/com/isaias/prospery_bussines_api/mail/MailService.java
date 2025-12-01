@@ -11,11 +11,14 @@ import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 @Service
 public class MailService {
-    @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
     private String from;
+
+    public MailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     public void sendMail(UserEntity user) {
         try {

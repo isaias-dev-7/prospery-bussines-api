@@ -19,11 +19,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
+    private final UserAccessor userAccessor;
 
-    @Autowired
-    private UserAccessor userAccessor;
+    public AuthInterceptor(JwtService jwtService, UserAccessor userAccessor) {
+        this.jwtService = jwtService;
+        this.userAccessor = userAccessor;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

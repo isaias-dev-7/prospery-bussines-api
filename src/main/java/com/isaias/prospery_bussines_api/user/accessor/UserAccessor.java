@@ -27,22 +27,21 @@ import com.isaias.prospery_bussines_api.user.specification.UserSpecification;
 @Component
 public class UserAccessor {
     private final UserRepository userRepository;
+    private final UtilsService utilsService;
+    private final UserEntityMapper userEntityMapper;
+    private final MailService mailService; 
+    @Autowired @Lazy private ScheduledTaskService scheduledTaskService;
 
-    @Autowired
-    private UtilsService utilsService;
-
-    @Autowired
-    private UserEntityMapper userEntityMapper;
-
-    @Autowired 
-    private MailService mailService;
-    
-    @Autowired 
-    @Lazy
-    private ScheduledTaskService scheduledTaskService;
-
-    public UserAccessor(UserRepository userRepository) {
+    public UserAccessor(
+        UserRepository userRepository, 
+        UtilsService utilsService,
+        UserEntityMapper userEntityMapper, 
+        MailService mailService
+        ) {
         this.userRepository = userRepository;
+        this.mailService = mailService;
+        this.userEntityMapper = userEntityMapper;
+        this.utilsService = utilsService;
     }
 
     public UserEntity createUser(CreateUserDto createUserDto) {
@@ -105,10 +104,7 @@ public class UserAccessor {
             String hashedPassword = utilsService.hashPassword(updateUserDto.getPassword());
             user.setPassword(hashedPassword);
 
-            String verifyCode = utilsService.generateCode();
-            user.setVerificationCode(verifyCode);
-
-            userRepository.save(user);
+            this.saveWithNewSecureCode(user);
             return true;
         } catch (Exception e) {
             throw handleException(e, "updateUserById");
@@ -170,15 +166,25 @@ public class UserAccessor {
         try {
             UserEntity user = this.getUserByUsername(confirmationCodeDto.getUsername());
             boolean confirm = user.getVerificationCode().equals(confirmationCodeDto.getCode());
-           
+
             if(confirm){
                 user.setActive(true);
-                this.saveUser(user);
+                this.saveWithNewSecureCode(user);
             }
 
             return confirm;
         } catch (Exception e) {
             throw handleException(e, "confirmAccount");
+        }
+    }
+
+    public void saveWithNewSecureCode(UserEntity user){
+        try {
+            String verifyCode = utilsService.generateCode();
+            user.setVerificationCode(verifyCode);
+            this.saveUser(user);
+        } catch (Exception e) {
+            throw handleException(e, "newSecureCode");
         }
     }
 

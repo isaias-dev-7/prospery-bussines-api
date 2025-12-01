@@ -21,10 +21,13 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UtilsService utilsService;
-    @Autowired
-    private UserService userService;
+    private final UtilsService utilsService;
+    private final UserService userService;
+
+    public UserController(UtilsService utilsService, UserService userService) {
+        this.utilsService = utilsService;
+        this.userService = userService;
+    }
 
     @GetMapping("/{uuid}")
     @Auth({ RoleConstant.ADMIN })

@@ -20,10 +20,13 @@ import com.isaias.prospery_bussines_api.user.messages_response.UserMessages;
 
 @Service
 public class UserService {
-    @Autowired
-    private UtilsService utilsService;
-    @Autowired
-    private UserAccessor userAccessor;
+    private final UtilsService utilsService;
+    private final UserAccessor userAccessor;
+
+    public UserService(UtilsService utilsService, UserAccessor userAccessor) {
+        this.utilsService = utilsService;
+        this.userAccessor = userAccessor;
+    }
 
     public Response<?> findUserByUUID(String uuid) {
         try {
