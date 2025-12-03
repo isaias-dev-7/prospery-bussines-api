@@ -12,6 +12,7 @@ import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.common.custom_response.Response;
 import com.isaias.prospery_bussines_api.common.custom_response.SuccessResponse;
 import com.isaias.prospery_bussines_api.common.messages_response.CommonMesajes;
+import com.isaias.prospery_bussines_api.mail.MailService;
 import com.isaias.prospery_bussines_api.user.accessor.UserAccessor;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.entity.UserEntity;
@@ -22,11 +23,13 @@ public class AuthService {
     private final UtilsService utilsService;
     private final UserAccessor userAccessor;
     private final JwtService jwtService;
+    private final MailService mailService;
 
-    public AuthService(UtilsService utilsService, UserAccessor userAccessor, JwtService jwtService) {
+    public AuthService(UtilsService utilsService, UserAccessor userAccessor, JwtService jwtService, MailService mailService) {
         this.utilsService = utilsService;
         this.userAccessor = userAccessor;
         this.jwtService = jwtService;
+        this.mailService = mailService;
     }
 
     public Response<?> login(LoginDto loginDto) {
@@ -35,7 +38,7 @@ public class AuthService {
             boolean correctPass = utilsService.verifyPassword(loginDto.getPassword(), user.getPassword());
 
             if(!correctPass) throw ErrorResponse.build(401, CommonMesajes.INVALID_CREDENTIALS);
-            if(!user.isActive()) throw ErrorResponse.build(401, "User not active");
+            if(!user.isActive()) throw ErrorResponse.build(401, UserMessages.USER_NOT_ACTIVE);
             String token = jwtService.generateToken(user);
 
             return SuccessResponse.build(
@@ -81,9 +84,10 @@ public class AuthService {
 
     public Response<?> getSecureCode(UserEntity user){
         try {
+            mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código Seguro");
             return SuccessResponse.build(
                 200, 
-                Map.of("code", user.getVerificationCode())
+                Map.of("code", CommonMesajes.SECURE_CODE)
             );
         } catch (Exception e) {
             return handleException(e, "getSecureCode");
