@@ -2,7 +2,6 @@ package com.isaias.prospery_bussines_api.user;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 

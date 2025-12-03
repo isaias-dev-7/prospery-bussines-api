@@ -14,4 +14,5 @@ public class UserMessages {
     public static final String USER_DELETED = "User deleted successfully";
     public static final String USER_ACCOUNT_ACTIVATED = "User account activated successfully";
     public static final String USER_ACCOUNT_FAIL_CONFIRMATION = "User confirmation account faild";
+    public static final String USER_NOT_ACTIVE = "User not active";
 }

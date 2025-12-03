@@ -1,13 +1,11 @@
 package com.isaias.prospery_bussines_api.mail;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.isaias.prospery_bussines_api.common.dtos.MailDto;
-import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 @Service
 public class MailService {
@@ -20,29 +18,29 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(UserEntity user) {
+    public void sendMail(String email, String message, String subject) {
         try {
-            MailDto mailDto = userToMail(user);
+            MailDto mailDto = toMail(email, message, subject);
             if(mailDto == null) return;
 
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setText(mailDto.getMessage());
-            message.setTo(mailDto.getTo());
-            message.setSubject(mailDto.getSubject());
-            message.setFrom(from);
+            SimpleMailMessage m = new SimpleMailMessage();
+            m.setText(mailDto.getMessage());
+            m.setTo(mailDto.getTo());
+            m.setSubject(mailDto.getSubject());
+            m.setFrom(from);
 
-            javaMailSender.send(message);
+            javaMailSender.send(m);
         } catch (Exception e) {
             handleException(e, "sendMail");
         }
     }
 
-    private MailDto userToMail(UserEntity user) {
+    private MailDto toMail(String email, String message, String subject) {
         try {
             MailDto mailDto = new MailDto();
-            mailDto.setMessage(user.getVerificationCode());
-            mailDto.setSubject("Activation Code");
-            mailDto.setTo(user.getEmail());
+            mailDto.setMessage(message);
+            mailDto.setSubject(subject);
+            mailDto.setTo(email);
             return mailDto;
         } catch (Exception e) {
             handleException(e, "userToMail");

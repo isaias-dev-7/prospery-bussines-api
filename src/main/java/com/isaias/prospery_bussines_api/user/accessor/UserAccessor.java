@@ -58,7 +58,7 @@ public class UserAccessor {
 
             UserEntity user = userEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
-            mailService.sendMail(user);
+            mailService.sendMail(user.getEmail(), verifyCode, "Código de verificación");
 
             scheduledTaskService.deleteUserAfterFiveMinutesInactive(user.getUsername());
             return userRepository.save(user);
@@ -132,7 +132,7 @@ public class UserAccessor {
         try {
             UserEntity user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
-            mailService.sendMail(user);
+            mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código de verificación");
         } catch (Exception e) {
             throw handleException(e, "sendCodeVeryfication");
         }
