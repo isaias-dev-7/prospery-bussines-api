@@ -8,14 +8,22 @@ import com.isaias.prospery_bussines_api.user.entity.UserEntity;
 
 @Component
 public class UserEntityMapper {
-
-    public UserEntity toEntity(CreateUserDto createUserDto, String hashedPassword){
-        UserEntity user = new UserEntity();
-        user.setPassword(hashedPassword);
-        user.setEmail(createUserDto.getEmail());
-        user.setPhone(createUserDto.getPhone());
-        user.setUsername(createUserDto.getUsername());
-        user.setRole(Role.valueOf(createUserDto.getRole()));
+    public static UserEntity toEntity(CreateUserDto createUserDto, String hashedPassword){
+        try {
+            UserEntity user = new UserEntity();
+            user.setPassword(hashedPassword);
+            user.setEmail(createUserDto.getEmail());
+            user.setPhone(createUserDto.getPhone());
+            user.setUsername(createUserDto.getUsername());
+            user.setRole(Role.valueOf(createUserDto.getRole()));
         return user;
+        } catch (Exception e) {
+            throw handleException(e, "toEntity");
+        }
+    }
+
+    private ErrorResponse handleException(Throwable error, String function) {
+        System.out.println("[ERROR] -  /user/mapper/UserEntityMapper: " + function);
+        throw utilsService.handleError(error);
     }
 }

@@ -24,7 +24,7 @@ public class TraceEntity {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false, length = 20)
