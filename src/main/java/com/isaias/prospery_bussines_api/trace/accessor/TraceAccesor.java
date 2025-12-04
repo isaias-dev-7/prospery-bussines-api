@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.trace.entity.TraceEntity;
-import com.isaias.prospery_bussines_api.trace.enums.TraceEnum;
 import com.isaias.prospery_bussines_api.trace.mapper.TraceMapper;
 import com.isaias.prospery_bussines_api.trace.record.TraceRecord;
 import com.isaias.prospery_bussines_api.trace.repository.TraceRepository;
