@@ -36,7 +36,7 @@ public class UserController {
             );
     }
 
-    @GetMapping("/email/{email}")
+    @GetMapping("/forgotPass/{email}")
     public ResponseEntity<?> getVerificationCode(@PathVariable String email) {
         return utilsService.handleResponse(
                 () -> userService.getVerificationCode(email)

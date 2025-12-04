@@ -114,9 +114,18 @@ public class UserAccessor {
     public UserEntity getUserByUsername(String username) {
         try {
             return userRepository.findByUsername(username)
-                    .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
+                .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
         } catch (Exception e) {
             throw handleException(e, "getUserByUsername");
+        }
+    }
+
+    public UserEntity getUserByEmail(String email){
+        try {
+            return userRepository.findByEmail(email)
+                .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
+        } catch (Exception e) {
+            throw handleException(e, "getUserByEmail");
         }
     }
 

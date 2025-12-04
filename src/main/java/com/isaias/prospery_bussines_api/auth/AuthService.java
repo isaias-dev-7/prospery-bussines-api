@@ -94,7 +94,6 @@ public class AuthService {
         }
     }
 
-
     private ErrorResponse handleException(Throwable error, String function) {
         System.out.println("[ERROR] -  /auth/AuthService: " + function);
         return utilsService.handleError(error);
