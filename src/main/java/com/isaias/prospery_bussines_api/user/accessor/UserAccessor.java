@@ -139,8 +139,7 @@ public class UserAccessor {
 
     public void sendVerificationCodeToUser(String email){
         try {
-            UserEntity user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
+            UserEntity user = this.getUserByEmail(email);
             mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código de verificación");
         } catch (Exception e) {
             throw handleException(e, "sendCodeVeryfication");
