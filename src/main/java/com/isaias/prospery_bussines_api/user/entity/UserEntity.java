@@ -2,51 +2,51 @@ package com.isaias.prospery_bussines_api.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isaias.prospery_bussines_api.common.enums.Role;
+import com.isaias.prospery_bussines_api.trace.entity.TraceEntity;
+
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
+@Data
 @Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue
-    @Getter @Setter
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    @Getter @Setter
+    @Column(nullable = false, unique = true, length = 20)
     private String username;
 
     @Column(nullable = false, unique = true)
-    @Getter @Setter
     private String email;
 
     @Column(nullable = false, unique = true)
-    @Getter @Setter
     private String phone;
 
     @Column(nullable = false)
-    @Getter @Setter
     @JsonIgnore
     private String password;
 
     @Column(nullable = false)
-    @Getter @Setter
     private boolean active = false;
 
     @Column(nullable = false)
-    @Getter @Setter
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Getter @Setter
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(nullable = true, length = 6)
-    @Getter @Setter
     @JsonIgnore
     private String verificationCode;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<TraceEntity> trace = new ArrayList<>();
 }

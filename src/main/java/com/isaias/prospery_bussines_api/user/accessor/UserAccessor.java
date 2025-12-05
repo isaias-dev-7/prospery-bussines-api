@@ -28,7 +28,6 @@ import com.isaias.prospery_bussines_api.user.specification.UserSpecification;
 public class UserAccessor {
     private final UserRepository userRepository;
     private final UtilsService utilsService;
-    private final UserEntityMapper userEntityMapper;
     private final MailService mailService; 
     @Autowired @Lazy private ScheduledTaskService scheduledTaskService;
 
@@ -40,7 +39,6 @@ public class UserAccessor {
         ) {
         this.userRepository = userRepository;
         this.mailService = mailService;
-        this.userEntityMapper = userEntityMapper;
         this.utilsService = utilsService;
     }
 
@@ -56,7 +54,7 @@ public class UserAccessor {
             String hashedPassword = utilsService.hashPassword(createUserDto.getPassword());
             String verifyCode = utilsService.generateCode();
 
-            UserEntity user = userEntityMapper.toEntity(createUserDto, hashedPassword);
+            UserEntity user = UserEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
             mailService.sendMail(user.getEmail(), verifyCode, "Código de verificación");
 
@@ -139,8 +137,7 @@ public class UserAccessor {
 
     public void sendVerificationCodeToUser(String email){
         try {
-            UserEntity user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> ErrorResponse.build(404, UserMessages.USER_NOT_FOUND));
+            UserEntity user = this.getUserByEmail(email);
             mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código de verificación");
         } catch (Exception e) {
             throw handleException(e, "sendCodeVeryfication");
