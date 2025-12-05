@@ -14,7 +14,9 @@ import com.isaias.prospery_bussines_api.auth.dtos.ConfirmationCodeDto;
 import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
-import com.isaias.prospery_bussines_api.mail.MailService;
+import com.isaias.prospery_bussines_api.common.enums.ChannelEnum;
+import com.isaias.prospery_bussines_api.notification.NotificationService;
+import com.isaias.prospery_bussines_api.notification.records.Notification;
 import com.isaias.prospery_bussines_api.scheduled_tasks.ScheduledTaskService;
 import com.isaias.prospery_bussines_api.user.dtos.CreateUserDto;
 import com.isaias.prospery_bussines_api.user.dtos.UpdateUserPassDto;
@@ -28,17 +30,17 @@ import com.isaias.prospery_bussines_api.user.specification.UserSpecification;
 public class UserAccessor {
     private final UserRepository userRepository;
     private final UtilsService utilsService;
-    private final MailService mailService; 
+    private final NotificationService notificationService;
     @Autowired @Lazy private ScheduledTaskService scheduledTaskService;
 
     public UserAccessor(
         UserRepository userRepository, 
         UtilsService utilsService,
         UserEntityMapper userEntityMapper, 
-        MailService mailService
+        NotificationService notificationService
         ) {
         this.userRepository = userRepository;
-        this.mailService = mailService;
+        this.notificationService = notificationService;
         this.utilsService = utilsService;
     }
 
@@ -56,7 +58,14 @@ public class UserAccessor {
 
             UserEntity user = UserEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
-            mailService.sendMail(user.getEmail(), verifyCode, "Código de verificación");
+            notificationService.send(
+                new Notification(
+                    ChannelEnum.EMAIL.toString(),
+                    user.getEmail(), 
+                    verifyCode, 
+                    "Código de verificación"
+                )
+            );
 
             scheduledTaskService.deleteUserAfterFiveMinutesInactive(user.getUsername());
             return userRepository.save(user);
@@ -138,7 +147,14 @@ public class UserAccessor {
     public void sendVerificationCodeToUser(String email){
         try {
             UserEntity user = this.getUserByEmail(email);
-            mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código de verificación");
+            notificationService.send(
+                new Notification(
+                    ChannelEnum.EMAIL.toString(),
+                    user.getEmail(), 
+                    user.getVerificationCode(), 
+                    "Código de verificación"
+                )
+            );
         } catch (Exception e) {
             throw handleException(e, "sendCodeVeryfication");
         }

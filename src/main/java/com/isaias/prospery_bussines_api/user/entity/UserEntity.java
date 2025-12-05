@@ -1,7 +1,7 @@
 package com.isaias.prospery_bussines_api.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.isaias.prospery_bussines_api.common.enums.Role;
+import com.isaias.prospery_bussines_api.common.enums.RoleEnum;
 import com.isaias.prospery_bussines_api.trace.entity.TraceEntity;
 
 import jakarta.persistence.*;
@@ -41,7 +41,7 @@ public class UserEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 
     @Column(nullable = true, length = 6)
     @JsonIgnore

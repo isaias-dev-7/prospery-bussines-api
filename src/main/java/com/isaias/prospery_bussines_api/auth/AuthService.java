@@ -84,7 +84,7 @@ public class AuthService {
 
     public Response<?> getSecureCode(UserEntity user){
         try {
-            mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código Seguro");
+            mailService.sendNotification(user.getEmail(), user.getVerificationCode(), "Código Seguro");
             return SuccessResponse.build(
                 200, 
                 Map.of("code", CommonMesajes.SECURE_CODE)
