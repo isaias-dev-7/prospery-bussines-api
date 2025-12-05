@@ -6,6 +6,7 @@ import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.trace.entity.TraceEntity;
 import com.isaias.prospery_bussines_api.trace.mapper.TraceMapper;
+import com.isaias.prospery_bussines_api.trace.messages_response.TraceMessages;
 import com.isaias.prospery_bussines_api.trace.record.TraceRecord;
 import com.isaias.prospery_bussines_api.trace.repository.TraceRepository;
 
@@ -22,8 +23,9 @@ public class TraceAccesor {
         this.utilsService = utilsService;
     }
 
-    public void createTrace(TraceRecord record){
+    public void createTrace(TraceRecord record) {
         try {
+            if(record == null) throw new Exception(TraceMessages.TRACE_NOT_CREATED);
             TraceEntity trace = TraceMapper.toEntity(record);
             traceRepository.save(trace);
         } catch (Exception e) {
