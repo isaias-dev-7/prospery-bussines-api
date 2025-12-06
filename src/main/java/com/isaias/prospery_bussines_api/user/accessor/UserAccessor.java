@@ -15,6 +15,7 @@ import com.isaias.prospery_bussines_api.common.UtilsService;
 import com.isaias.prospery_bussines_api.common.custom_response.ErrorResponse;
 import com.isaias.prospery_bussines_api.common.dtos.PaginDto;
 import com.isaias.prospery_bussines_api.common.enums.ChannelEnum;
+import com.isaias.prospery_bussines_api.common.messages_response.CommonMesajes;
 import com.isaias.prospery_bussines_api.notification.NotificationService;
 import com.isaias.prospery_bussines_api.notification.records.Notification;
 import com.isaias.prospery_bussines_api.scheduled_tasks.ScheduledTaskService;
@@ -58,7 +59,7 @@ public class UserAccessor {
 
             UserEntity user = UserEntityMapper.toEntity(createUserDto, hashedPassword);
             user.setVerificationCode(verifyCode);
-            notificationService.send(
+            boolean notificationSent = notificationService.send(
                 new Notification(
                     ChannelEnum.EMAIL.toString(),
                     user.getEmail(), 
@@ -67,6 +68,7 @@ public class UserAccessor {
                 )
             );
 
+            if(!notificationSent) throw ErrorResponse.build(400, CommonMesajes.FAIL_EMAIL);
             scheduledTaskService.deleteUserAfterFiveMinutesInactive(user.getUsername());
             return userRepository.save(user);
         } catch (Exception e) {
@@ -147,7 +149,7 @@ public class UserAccessor {
     public void sendVerificationCodeToUser(String email){
         try {
             UserEntity user = this.getUserByEmail(email);
-            notificationService.send(
+            boolean notificationSent = notificationService.send(
                 new Notification(
                     ChannelEnum.EMAIL.toString(),
                     user.getEmail(), 
@@ -155,6 +157,8 @@ public class UserAccessor {
                     "Código de verificación"
                 )
             );
+
+           if(!notificationSent) throw ErrorResponse.build(400, CommonMesajes.FAIL_EMAIL);
         } catch (Exception e) {
             throw handleException(e, "sendCodeVeryfication");
         }

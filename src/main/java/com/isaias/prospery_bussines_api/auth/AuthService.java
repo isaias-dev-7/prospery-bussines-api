@@ -59,7 +59,7 @@ public class AuthService {
             return SuccessResponse.build(
                 200, 
                 Map.ofEntries(
-                            Map.entry("message", user.getUsername() + " " + CommonMesajes.ACTIVATION_CODE),
+                            Map.entry("message", user.getUsername() + " " + CommonMesajes.SECURE_CODE),
                             Map.entry("username", user.getUsername())
                             )
             );

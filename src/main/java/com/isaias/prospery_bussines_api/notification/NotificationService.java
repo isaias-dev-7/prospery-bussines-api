@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.isaias.prospery_bussines_api.common.messages_response.CommonMesajes;
 import com.isaias.prospery_bussines_api.notification.interfaces.NotificationChannel;
 import com.isaias.prospery_bussines_api.notification.records.Notification;
 
@@ -19,7 +20,7 @@ public class NotificationService {
 
     public boolean send(Notification record) {
         try {
-            if (record == null) throw new IllegalArgumentException("Param record must be provided ");
+            if (record == null) throw new IllegalArgumentException(CommonMesajes.INVALID_PARAM);
             NotificationChannel channel = channels.get(record.channel());
             return channel.sendNotification(record.to(), record.message(), record.subject());
         } catch (Exception e) {

@@ -1,7 +1,5 @@
 package com.isaias.prospery_bussines_api.mail;
 
-import java.nio.channels.Channel;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
