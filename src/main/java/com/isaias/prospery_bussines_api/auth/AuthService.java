@@ -25,7 +25,12 @@ public class AuthService {
     private final JwtService jwtService;
     private final MailService mailService;
 
-    public AuthService(UtilsService utilsService, UserAccessor userAccessor, JwtService jwtService, MailService mailService) {
+    public AuthService(
+        UtilsService utilsService, 
+        UserAccessor userAccessor, 
+        JwtService jwtService, 
+        MailService mailService
+    ) {
         this.utilsService = utilsService;
         this.userAccessor = userAccessor;
         this.jwtService = jwtService;
