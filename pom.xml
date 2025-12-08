@@ -75,7 +75,6 @@
 		<dependency>
     		<groupId>jakarta.validation</groupId>
     		<artifactId>jakarta.validation-api</artifactId>
-    		<version>3.0.2</version>
 		</dependency>
 		<dependency>
     		<groupId>org.hibernate.validator</groupId>
@@ -110,7 +109,6 @@
 		<dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-webflux</artifactId>
-    		<version>4.0.0</version>
 		</dependency>
 		<dependency>
         	<groupId>org.telegram</groupId>

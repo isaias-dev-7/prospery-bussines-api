@@ -1,9 +1,11 @@
 package com.isaias.prospery_bussines_api.telegram.bot;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Component
 public class TelegramBot extends TelegramLongPollingBot {
     @Value("${spring.telegram.username}")
     private String username;
@@ -13,7 +15,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update arg0) {
-        throw new UnsupportedOperationException("Unimplemented method 'onUpdateReceived'");
+        System.out.println(arg0);
     }
 
     @Override
