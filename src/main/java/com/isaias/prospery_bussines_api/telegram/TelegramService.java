@@ -1,17 +1,12 @@
 package com.isaias.prospery_bussines_api.telegram;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 
 import com.isaias.prospery_bussines_api.common.enums.ChannelEnum;
 import com.isaias.prospery_bussines_api.notification.interfaces.NotificationChannel;
 
 @Service
 public class TelegramService implements NotificationChannel {
-    @Value("${spring.telegram.bot-token}")
-    private String botToken;
-
     @Override
     public String getChannel() {
         return String.valueOf(ChannelEnum.TELEGRAM);       
