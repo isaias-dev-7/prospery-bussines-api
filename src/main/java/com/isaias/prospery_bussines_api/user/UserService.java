@@ -75,7 +75,7 @@ public class UserService {
             userAccessor.sendVerificationCodeToUser(email);
             return SuccessResponse.build(
                     200,
-                    Map.of("message", CommonMesajes.ACTIVATION_CODE));
+                    Map.of("message", CommonMesajes.SECURE_CODE));
         } catch (Exception e) {
             return handleException(e, "getVerificationCode");
         }

@@ -25,7 +25,12 @@ public class AuthService {
     private final JwtService jwtService;
     private final MailService mailService;
 
-    public AuthService(UtilsService utilsService, UserAccessor userAccessor, JwtService jwtService, MailService mailService) {
+    public AuthService(
+        UtilsService utilsService, 
+        UserAccessor userAccessor, 
+        JwtService jwtService, 
+        MailService mailService
+    ) {
         this.utilsService = utilsService;
         this.userAccessor = userAccessor;
         this.jwtService = jwtService;
@@ -59,7 +64,7 @@ public class AuthService {
             return SuccessResponse.build(
                 200, 
                 Map.ofEntries(
-                            Map.entry("message", user.getUsername() + " " + CommonMesajes.ACTIVATION_CODE),
+                            Map.entry("message", user.getUsername() + " " + CommonMesajes.SECURE_CODE),
                             Map.entry("username", user.getUsername())
                             )
             );
@@ -84,7 +89,7 @@ public class AuthService {
 
     public Response<?> getSecureCode(UserEntity user){
         try {
-            mailService.sendMail(user.getEmail(), user.getVerificationCode(), "Código Seguro");
+            mailService.sendNotification(user.getEmail(), user.getVerificationCode(), "Código Seguro");
             return SuccessResponse.build(
                 200, 
                 Map.of("code", CommonMesajes.SECURE_CODE)

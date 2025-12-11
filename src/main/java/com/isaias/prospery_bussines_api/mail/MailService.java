@@ -6,9 +6,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.isaias.prospery_bussines_api.common.dtos.MailDto;
+import com.isaias.prospery_bussines_api.common.enums.ChannelEnum;
+import com.isaias.prospery_bussines_api.notification.interfaces.NotificationChannel;
 
 @Service
-public class MailService {
+public class MailService implements NotificationChannel{
     private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
@@ -18,10 +20,16 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String email, String message, String subject) {
+    @Override
+    public String getChannel() {
+        return String.valueOf(ChannelEnum.EMAIL);
+    }
+
+    @Override
+    public boolean sendNotification(String email, String message, String subject) {
         try {
             MailDto mailDto = toMail(email, message, subject);
-            if(mailDto == null) return;
+            if(mailDto == null) return false;
 
             SimpleMailMessage m = new SimpleMailMessage();
             m.setText(mailDto.getMessage());
@@ -30,8 +38,10 @@ public class MailService {
             m.setFrom(from);
 
             javaMailSender.send(m);
+            return true;
         } catch (Exception e) {
             handleException(e, "sendMail");
+            return false;
         }
     }
 
