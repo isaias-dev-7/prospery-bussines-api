@@ -18,6 +18,7 @@ import java.util.UUID;
 public class UserEntity {
     @Id
     @GeneratedValue
+    @Column(columnDefinition = "uuid DEFAULT gen_random_uuid()")
     private UUID id;
 
     @Column(nullable = false, unique = true, length = 20)
@@ -37,7 +38,7 @@ public class UserEntity {
     private boolean active = false;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

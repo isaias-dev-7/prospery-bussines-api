@@ -1,5 +1,6 @@
 package com.isaias.prospery_bussines_api.user.accessor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
@@ -58,7 +59,9 @@ public class UserAccessor {
             String verifyCode = utilsService.generateCode();
 
             UserEntity user = UserEntityMapper.toEntity(createUserDto, hashedPassword);
+            LocalDateTime now = LocalDateTime.now();
             user.setVerificationCode(verifyCode);
+            user.setCreatedAt(now);
             boolean notificationSent = notificationService.send(
                 new Notification(
                     ChannelEnum.EMAIL.toString(),
