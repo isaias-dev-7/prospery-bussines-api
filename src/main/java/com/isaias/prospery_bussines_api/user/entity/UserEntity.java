@@ -48,6 +48,10 @@ public class UserEntity {
     @JsonIgnore
     private String verificationCode;
 
+    @Column(nullable = false, length = 10)
+    @JsonIgnore
+    private String chatId;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<TraceEntity> trace = new ArrayList<>();
 }
